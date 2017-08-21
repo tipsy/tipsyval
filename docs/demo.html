@@ -1,0 +1,66 @@
+<html>
+<head>
+    <style>
+        * {
+            font: 16px arial;
+        }
+
+        body {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 0 10px;
+            height: 40px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        input {
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <form>
+        <label>Card number</label>
+        <input id="card-number" placeholder="1234 1234 1234 1234"
+               data-tipsyval-empty-msg="Please enter your card number"
+               data-tipsyval-invalid-msg="Enter a valid card number"
+        >
+        <label>Expiration date</label>
+        <br>
+        <input id="card-expiration-date" name="card-expiration-date" type="tel" placeholder="MM/YY" maxlength="5"
+               data-tipsyval-empty-msg="Please enter your card expiration date"
+               data-tipsyval-invalid-msg="Enter your card expiration date, for example '01/19'"
+               data-tipsyval-pattern="^.{5}"
+        >
+        <label>Security code</label>
+        <input name="card-security-code" type="tel" placeholder="123" maxlength="3"
+               data-tipsyval-empty-msg="Please enter your card security code"
+               data-tipsyval-invalid-msg="Enter your card security code (3 digits on the back of your card)"
+               data-tipsyval-pattern="^.{3}"
+        >
+        <button>Submit (automatic trigger)</button>
+    </form>
+
+    <label>Programmatic trigger</label>
+    <button id="validate">Validate</button>
+
+    <script src="tipsyval.js"></script>
+    <script>
+        TipsyVal.setCustomValidation("card-number", function (input) {
+            return input.value.length >= 13;
+        });
+
+        document.getElementById("validate").addEventListener("click", function () {
+            TipsyVal.triggerValidation(document.getElementById("card-expiration-date"));
+        });
+    </script>
+</body>
+</html>
