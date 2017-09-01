@@ -24,6 +24,7 @@
 
         let arrowSize = 6;
         let currentInput;
+        let positionInterval;
 
         let isIosDevice = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
@@ -66,11 +67,12 @@
                   </div>
                 `);
                 positionPopover();
+                positionInterval = setInterval(positionPopover, 10);
             }, 200);
         }
 
         function positionPopover() {
-            if (document.getElementById("tipsyval") !== null) {
+            try {
                 let bottom = currentInput.getBoundingClientRect().bottom;
                 let left = currentInput.getBoundingClientRect().left;
                 if (isIosDevice && document.activeElement.tagName === "INPUT") { // praise the spaghetti monster: http://javascript.info/tutorial/coordinates
@@ -85,18 +87,19 @@
                 document.getElementById("tipsyval" + "-arrow").style.left = `${left + 20}px`;
                 document.getElementById("tipsyval").style.top = `${bottom + arrowSize}px`;
                 document.getElementById("tipsyval").style.left = `${left + 10}px`;
+            } catch (e) {
+                closeValidation();
             }
         }
 
         function closeValidation() {
+            clearInterval(positionInterval);
             if (document.getElementById("tipsyval") !== null) {
                 document.body.removeChild(document.getElementById("tipsyval"));
             }
         }
 
-        function isEmpty(input) {
-            return input.value.length === 0;
-        }
+        let isEmpty = input => input.value.length === 0;
 
         let isInvalid = input => {
             if (input.getAttribute("data-tipsyval-pattern") !== null) {
@@ -106,9 +109,6 @@
                 return !this.customValidationFunctions[input.id](input);
             }
         };
-
-        // Make sure popover stays position in case of scrolling/resizing
-        setInterval(() => positionPopover(), 10);
 
         // Catch any form submits and run validation on tipsyval-fields in the form
         document.addEventListener("submit", e => {
