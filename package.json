@@ -1,6 +1,6 @@
 {
   "name": "tipsyval",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Simple tooltip validation for HTML input fields",
   "main": "dist/tipsyval.js",
   "scripts": {
